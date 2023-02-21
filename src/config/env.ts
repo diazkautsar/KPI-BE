@@ -6,6 +6,8 @@ const envSchema = joi
         ENV: joi.string().valid('local', 'development', 'staging', 'production').required(),
         PORT: joi.string().required().default('3000'),
         DATABASE_URL: joi.string().required(),
+        SECRET_KEY: joi.string().required(),
+        SALT_ROUNDS: joi.number().required(),
     })
     .unknown()
     .required();
@@ -15,6 +17,8 @@ export const env = Object.freeze({
     ENV: process.env.ENV,
     PORT: process.env.PORT,
     DATABASE_URL: process.env.DATABASE_URL || '',
+    SECRET_KEY: process.env.SECRET_KEY || '',
+    SALT_ROUNDS: process.env.SALT_ROUNDS || '12',
 });
 
 const validateEnv = envSchema.validateAsync(env);
