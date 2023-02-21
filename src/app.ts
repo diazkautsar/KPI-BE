@@ -2,6 +2,7 @@ import express from 'express';
 
 import logger from './libraries/logger';
 import validateEnv from './config/env';
+import routes from './routes/index';
 
 const app = async () => {
     const app = express();
@@ -9,9 +10,7 @@ const app = async () => {
     await validateEnv;
     logger.info('ENV loaded');
 
-    app.get('/', (req, res, next) => {
-        res.send('HELLO CAN I HELP YOU ?');
-    });
+    app.use(routes);
 
     return app;
 };
