@@ -18,7 +18,10 @@ export default class AuthController {
     }
 
     async register(req: Request, res: Response, next: NextFunction) {
-        const response = await this.registerUseCase.exec();
+        const payload = {
+            body: req.body,
+        };
+        const response = await this.registerUseCase.exec(payload);
 
         this.httpResponse.httpResponse(response, res);
     }
