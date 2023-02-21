@@ -1,7 +1,7 @@
 {
   "name": "kpi-be",
   "version": "1.0.0",
-  "description": "This repository for use for test in KPI institute",
+  "description": "This repository use for test in KPI institute",
   "main": "index.ts",
   "scripts": {
     "dev": "nodemon --exec ts-node src/index.ts",
