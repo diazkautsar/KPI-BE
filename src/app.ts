@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
 
 import logger from './libraries/logger';
 import validateEnv from './config/env';
@@ -11,6 +11,21 @@ const app = async () => {
     logger.info('ENV loaded');
 
     app.use(routes);
+
+    app.use((req: Request, res: Response, _next: NextFunction) => {
+        res.status(404).json({
+            success: false,
+            message: 'Path not found',
+        });
+    });
+
+    app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
+        logger.error(err.toString());
+        res.status(500).send({
+            success: false,
+            message: 'INTERNAL SERVER ERROR',
+        });
+    });
 
     return app;
 };
