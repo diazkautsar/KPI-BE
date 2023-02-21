@@ -1,14 +1,27 @@
 import express, { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import cors from 'cors';
+import morgan from 'morgan';
+import helmet from 'helmet';
 
 import logger from './libraries/logger';
 import validateEnv from './config/env';
 import routes from './routes/index';
+import { connectDatabase } from './config/database';
 
 const app = async () => {
     const app = express();
 
     await validateEnv;
     logger.info('ENV loaded');
+
+    await connectDatabase();
+    logger.info('Success connect database');
+
+    app.use(cors());
+    app.use(helmet());
+    app.use(morgan('dev'));
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
 
     app.use(routes);
 
