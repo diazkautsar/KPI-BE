@@ -1,13 +1,19 @@
-import express from 'express'
+import express from 'express';
+
+import logger from './libraries/logger';
+import validateEnv from './config/env';
 
 const app = async () => {
     const app = express();
 
+    await validateEnv;
+    logger.info('ENV loaded');
+
     app.get('/', (req, res, next) => {
-        res.send("HELLO CAN I HELP YOU ?")
-    })
+        res.send('HELLO CAN I HELP YOU ?');
+    });
 
-    return app
-}
+    return app;
+};
 
-export default app
+export default app;
