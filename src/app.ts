@@ -4,9 +4,11 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 
 import logger from './libraries/logger';
-import validateEnv from './config/env';
+import validateEnv, { env } from './config/env';
 import routes from './routes/index';
 import { connectDatabase } from './config/database';
+
+import mongoose from 'mongoose';
 
 const app = async () => {
     const app = express();
@@ -22,6 +24,10 @@ const app = async () => {
     app.use(morgan('dev'));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
+
+    if (env.ENV === 'development') {
+        mongoose.set('debug', true);
+    }
 
     app.use(routes);
 
