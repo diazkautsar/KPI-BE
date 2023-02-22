@@ -50,6 +50,7 @@ export default class RegisterUseCase {
 
             if (!validator.check()) {
                 session.endSession();
+                response.statusCode = 400;
                 response.success = false;
                 response.messageTitle = 'Form Invalid';
                 response.data = validator.errors.all();
@@ -60,6 +61,7 @@ export default class RegisterUseCase {
             const validateRole = await this.userRoleRepository.getRoleBySlug(bodyReq.user_role);
             if (!validateRole) {
                 session.endSession();
+                response.statusCode = 400;
                 response.success = false;
                 response.messageTitle = 'Form Invalid';
                 response.message = 'user role invalid';
@@ -81,6 +83,7 @@ export default class RegisterUseCase {
             session.endSession();
 
             response.success = true;
+            response.statusCode = 201;
             response.messageTitle = 'Create user';
             response.message = 'Create user success';
             response.data = user ?? null;
