@@ -41,4 +41,21 @@ export default class UserRepository {
             return null;
         }
     }
+
+    async getUserBasedOnIds(ids: string[]) {
+        try {
+            return await userModel
+                .find({
+                    _id: {
+                        $in: ids,
+                    },
+                })
+                .populate<{ user_role: UserRoleInterface }>('user_role')
+                .orFail()
+                .exec();
+        } catch (error) {
+            logger.error(error);
+            return [];
+        }
+    }
 }
