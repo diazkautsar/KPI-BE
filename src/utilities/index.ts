@@ -5,6 +5,25 @@ class Utililty {
 
         return regex_pattern.test(payload);
     }
+
+    static trueOrFalse(data: string) {
+        switch (data?.toLowerCase()?.trim()) {
+            case 'true':
+            case 'yes':
+            case '1':
+                return true;
+
+            case 'false':
+            case 'no':
+            case '0':
+            case null:
+            case undefined:
+                return false;
+
+            default:
+                return JSON.parse(data);
+        }
+    }
 }
 
 export default Utililty;
