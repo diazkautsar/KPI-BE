@@ -76,10 +76,12 @@ export default class LoginUseCase {
             }
 
             const data = {
+                id: user.id,
                 name: user.name,
                 username: user.username,
                 email: user.email,
                 role: user.user_role.title,
+                role_slug: user.user_role.slug,
                 is_active: user.is_active,
                 is_blocked: user.is_blocked,
             };
