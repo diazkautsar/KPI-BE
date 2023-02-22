@@ -87,8 +87,6 @@ class GenericResponseEntity implements GREInterface {
     }
 
     toResponse(): ResponseInterface {
-        this._statusCode = this._success ? httpStatus.OK : this._statusCode ?? httpStatus.BAD_REQUEST;
-
         const response: ResponseInterface = {
             statusCode: this._statusCode,
             success: this._success,
