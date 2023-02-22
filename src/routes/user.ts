@@ -8,6 +8,7 @@ import UserController from '../controllers/userController';
 
 // use cases
 import CreateUserUseCase from '../useCases/userUseCase/CreateUserUseCase';
+import GetUserUseCase from '../useCases/userUseCase/GetUserUseCase';
 
 // repositories
 import UserRoleRepository from '../repositories/UserRole.repository';
@@ -35,11 +36,15 @@ const useCases = {
         userRepository,
         conn,
     }),
+    getUserUseCase: new GetUserUseCase({
+        userRepository,
+    }),
 };
 
 const controller = new UserController({
     httpResponse,
     createUserUseCase: useCases.createUserUseCase,
+    getUserUseCase: useCases.getUserUseCase,
 });
 
 const router = express.Router();
@@ -50,6 +55,18 @@ router.post(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             await controller.createUser(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+router.get(
+    '/:userId',
+    middleware.authMiddleware.bind(middleware),
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await controller.getUserById(req, res, next);
         } catch (error) {
             next(error);
         }
