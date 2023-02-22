@@ -7,6 +7,10 @@ export default class Jwt {
     }
 
     async verify(token: string) {
-        return jwt.verify(token, env.SECRET_KEY);
+        try {
+            return jwt.verify(token, env.SECRET_KEY);
+        } catch (error) {
+            return null;
+        }
     }
 }
