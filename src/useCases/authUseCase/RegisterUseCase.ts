@@ -8,6 +8,7 @@ import Bcrypt from '../../libraries/Bcrypt';
 import logger from '../../libraries/logger';
 import UserRoleRepository from '../../repositories/UserRole.repository';
 import UserRepository from '../../repositories/User.repository';
+import { ROLE_ADMINISTRATOR } from '../../constants';
 
 type constructorType = {
     userRoleRepository: UserRoleRepository;
@@ -42,7 +43,7 @@ export default class RegisterUseCase {
                 email: 'required|string',
                 username: 'required|string',
                 password: 'required|string',
-                user_role: 'required|string',
+                user_role: `required|in:${ROLE_ADMINISTRATOR}|string`,
             };
 
             const validator = new Validator(bodyReq, rules);
