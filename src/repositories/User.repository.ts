@@ -58,4 +58,17 @@ export default class UserRepository {
             return [];
         }
     }
+
+    async getUsers(payload: {}) {
+        try {
+            return await userModel
+                .find(payload)
+                .populate<{ user_role: UserRoleInterface }>('user_role')
+                .orFail()
+                .exec();
+        } catch (error) {
+            logger.error(error);
+            return [];
+        }
+    }
 }
