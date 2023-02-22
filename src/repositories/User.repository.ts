@@ -28,4 +28,17 @@ export default class UserRepository {
             return null;
         }
     }
+
+    async getUserBasedOnPaylod(payload: any) {
+        try {
+            return await userModel
+                .findOne(payload)
+                .populate<{ user_role: UserRoleInterface }>('user_role')
+                .orFail()
+                .exec();
+        } catch (error) {
+            logger.error(error);
+            return null;
+        }
+    }
 }
