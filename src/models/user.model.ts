@@ -6,7 +6,7 @@ export const userSchema = new Schema<UserInterface>({
     email: { type: Schema.Types.String, required: true, unique: true },
     username: { type: Schema.Types.String, required: true, unique: true },
     password: { type: Schema.Types.String, required: true },
-    user_role: { type: Schema.Types.ObjectId, required: true },
+    user_role: { type: Schema.Types.ObjectId, required: true, ref: 'user_role' },
     is_active: { type: Schema.Types.Boolean, required: true, default: true },
     is_blocked: { type: Schema.Types.Boolean, required: true, default: false },
     created_by: { type: Schema.Types.String, required: false },
