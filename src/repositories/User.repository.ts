@@ -2,12 +2,14 @@ import { ClientSession } from 'mongoose';
 import userModel from '../models/user.model';
 import { UserInterface } from '../interface/user.interface';
 import { UserRoleInterface } from '../interface/userRole.interface';
+import logger from '../libraries/logger';
 
 export default class UserRepository {
     async addUser(payload: UserInterface, session: ClientSession) {
         try {
             return await session.withTransaction(async () => await userModel.create(payload));
         } catch (error) {
+            logger.error(error);
             throw new Error('Error insert user');
         }
     }
@@ -22,6 +24,7 @@ export default class UserRepository {
                 .orFail()
                 .exec();
         } catch (error) {
+            logger.error(error);
             return null;
         }
     }
