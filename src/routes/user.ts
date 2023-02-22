@@ -9,6 +9,7 @@ import UserController from '../controllers/userController';
 // use cases
 import CreateUserUseCase from '../useCases/userUseCase/CreateUserUseCase';
 import GetUserUseCase from '../useCases/userUseCase/GetUserUseCase';
+import GetAllUserUseCase from '../useCases/userUseCase/GetAllUserUseCase';
 
 // repositories
 import UserRoleRepository from '../repositories/UserRole.repository';
@@ -39,12 +40,16 @@ const useCases = {
     getUserUseCase: new GetUserUseCase({
         userRepository,
     }),
+    getAllUserUseCase: new GetAllUserUseCase({
+        userRepository,
+    }),
 };
 
 const controller = new UserController({
     httpResponse,
     createUserUseCase: useCases.createUserUseCase,
     getUserUseCase: useCases.getUserUseCase,
+    getAllUserUseCase: useCases.getAllUserUseCase,
 });
 
 const router = express.Router();
@@ -72,5 +77,13 @@ router.get(
         }
     }
 );
+
+router.get('/', middleware.authMiddleware.bind(middleware), async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await controller.getUsers(req, res, next);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default router;
