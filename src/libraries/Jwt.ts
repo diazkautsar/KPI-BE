@@ -3,7 +3,7 @@ import { env } from '../config/env';
 
 export default class Jwt {
     async sign(data: {}) {
-        return jwt.sign(data, env.SECRET_KEY, { algorithm: 'RS256' });
+        return jwt.sign(data, env.SECRET_KEY);
     }
 
     async verify(token: string) {
