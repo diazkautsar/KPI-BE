@@ -9,5 +9,5 @@ export interface UserInterface {
     is_active?: boolean;
     is_blocked?: boolean;
     created_by?: string;
-    created_id?: string;
+    created_by_id?: string;
 }
