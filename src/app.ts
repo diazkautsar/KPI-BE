@@ -40,7 +40,7 @@ const app = async () => {
     });
 
     app.use((err: CustomErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
-        if (err && ['permission_role_error', 'invalid_token'].includes(err.type ?? '')) {
+        if (err && ['permission_role_error', 'invalid_token', 'bad_request'].includes(err.type ?? '')) {
             res.status(err.statusCode ?? 500).send({
                 statusCode: err.statusCode,
                 message: err.message,
