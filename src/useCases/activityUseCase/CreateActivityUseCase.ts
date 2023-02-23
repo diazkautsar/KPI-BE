@@ -48,7 +48,7 @@ export default class CreateActivityUseCase {
         const checkExisting = await this.activityRepository.getActivity({
             name: bodyReq.name,
         });
-        if (checkExisting) {
+        if (Array.isArray(checkExisting) && checkExisting.length) {
             response.statusCode = 400;
             response.success = false;
             response.messageTitle = 'Form Invalid';
