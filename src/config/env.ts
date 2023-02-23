@@ -8,6 +8,9 @@ const envSchema = joi
         DATABASE_URL: joi.string().required(),
         SECRET_KEY: joi.string().required(),
         SALT_ROUNDS: joi.number().required(),
+        IMAGEKIT_PUBLIC_KEY: joi.string().required(),
+        IMAGEKIT_PRIVATE_KEY: joi.string().required(),
+        IMAGEKIT_URL_ENDPOINT: joi.string().required(),
     })
     .unknown()
     .required();
@@ -19,6 +22,9 @@ export const env = Object.freeze({
     DATABASE_URL: process.env.DATABASE_URL || '',
     SECRET_KEY: process.env.SECRET_KEY || '',
     SALT_ROUNDS: process.env.SALT_ROUNDS || '12',
+    IMAGEKIT_PUBLIC_KEY: process.env.IMAGEKIT_PUBLIC_KEY || '',
+    IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY || '',
+    IMAGEKIT_URL_ENDPOINT: process.env.IMAGEKIT_URL_ENDPOINT || '',
 });
 
 const validateEnv = envSchema.validateAsync(env);
