@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
@@ -7,6 +7,7 @@ import logger from './libraries/logger';
 import validateEnv, { env } from './config/env';
 import routes from './routes/index';
 import { connectDatabase } from './config/database';
+import { CustomErrorRequestHandler } from './interface/request.interface';
 
 import mongoose from 'mongoose';
 
@@ -38,12 +39,19 @@ const app = async () => {
         });
     });
 
-    app.use((err: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
-        logger.error(err.toString());
-        res.status(500).send({
-            success: false,
-            message: 'INTERNAL SERVER ERROR',
-        });
+    app.use((err: CustomErrorRequestHandler, req: Request, res: Response, next: NextFunction) => {
+        if (err && ['permission_role_error', 'invalid_token'].includes(err.type ?? '')) {
+            res.status(err.statusCode ?? 500).send({
+                statusCode: err.statusCode,
+                message: err.message,
+                messageTitle: err.messageTitle,
+            });
+        } else {
+            res.status(500).send({
+                success: false,
+                message: 'INTERNAL SERVER ERROR',
+            });
+        }
     });
 
     return app;
