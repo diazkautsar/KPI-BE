@@ -8,6 +8,7 @@ import ActivityController from '../controllers/activityController';
 
 // use cases
 import CreateActivityUseCase from '../useCases/activityUseCase/CreateActivityUseCase';
+import GetActivityUseCase from '../useCases/activityUseCase/GetActivityUseCase';
 
 // repositories
 import ActivityRepository from '../repositories/Activity.repository';
@@ -20,6 +21,7 @@ import { authMiddleware, permissionRole } from '../middlewares/index';
 
 // constant
 import { ROLE_ADMINISTRATOR, ROLE_LEARNER, ROLE_PROVIDER } from '../constants/index';
+import { CustomRequest } from '../interface/request.interface';
 
 const httpResponse = new HttpResponse();
 const activityRepository = new ActivityRepository();
@@ -29,18 +31,43 @@ const useCases = {
         conn,
         activityRepository,
     }),
+    getActivityUseCase: new GetActivityUseCase({
+        activityRepository,
+    }),
 };
 
 const controller = new ActivityController({
     httpResponse,
     createActivityUseCase: useCases.createActivityUseCase,
+    getActivityUseCase: useCases.getActivityUseCase,
 });
 
 const router = express.Router();
 
-router.post('/', authMiddleware, permissionRole([ROLE_ADMINISTRATOR, ROLE_PROVIDER]), async (req, res, next) => {
+router.post(
+    '/',
+    authMiddleware,
+    permissionRole([ROLE_ADMINISTRATOR, ROLE_PROVIDER]),
+    async (req: CustomRequest, res: Response, next: NextFunction) => {
+        try {
+            await controller.createActivity(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+router.get('/:activityId', authMiddleware, async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
-        await controller.createActivity(req, res, next);
+        await controller.getActivityById(req, res, next);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get('/', authMiddleware, async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        await controller.getActivities(req, res, next);
     } catch (error) {
         next(error);
     }
