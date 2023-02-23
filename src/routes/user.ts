@@ -21,13 +21,12 @@ import Jwt from '../libraries/Jwt';
 import Bcrypt from '../libraries/Bcrypt';
 
 // middlewares
-import Middleware from '../middlewares/index';
+import { authMiddleware } from '../middlewares/index';
 
 const jwt = new Jwt();
 const httpResponse = new HttpResponse();
 const userRoleRepository = new UserRoleRepository();
 const userRepository = new UserRepository();
-const middleware = new Middleware({ jwt });
 const bcrypt = new Bcrypt();
 
 const useCases = {
@@ -54,31 +53,23 @@ const controller = new UserController({
 
 const router = express.Router();
 
-router.post(
-    '/add',
-    middleware.authMiddleware.bind(middleware),
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            await controller.createUser(req, res, next);
-        } catch (error) {
-            next(error);
-        }
+router.post('/add', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await controller.createUser(req, res, next);
+    } catch (error) {
+        next(error);
     }
-);
+});
 
-router.get(
-    '/:userId',
-    middleware.authMiddleware.bind(middleware),
-    async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            await controller.getUserById(req, res, next);
-        } catch (error) {
-            next(error);
-        }
+router.get('/:userId', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await controller.getUserById(req, res, next);
+    } catch (error) {
+        next(error);
     }
-);
+});
 
-router.get('/', middleware.authMiddleware.bind(middleware), async (req: Request, res: Response, next: NextFunction) => {
+router.get('/', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
         await controller.getUsers(req, res, next);
     } catch (error) {
