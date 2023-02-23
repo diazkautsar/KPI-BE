@@ -15,10 +15,10 @@ export default class ActivityRepository {
 
     async getActivity(payload: any) {
         try {
-            return await activityModel.findOne(payload);
+            return await activityModel.find(payload);
         } catch (error) {
             logger.error(error);
-            return null;
+            return [];
         }
     }
 }
