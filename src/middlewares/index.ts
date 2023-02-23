@@ -3,46 +3,56 @@ import Jwt from '../libraries/Jwt';
 
 import { CustomRequest } from '../interface/request.interface';
 
-type constructorType = {
-    jwt: Jwt;
+const messageInvalidToken: string =
+    "We're sorry, your login token has expired or is invalid. Please log in again to continue using our service.";
+const messageErrorTitle: string = 'Invalid or Expired Token';
+const jwt = new Jwt();
+
+function toResponse(errorTitle: string = messageErrorTitle, erroMessage: string = messageInvalidToken) {
+    return {
+        statusCode: 400,
+        message: erroMessage,
+        messageTitle: errorTitle,
+    };
+}
+
+export const authMiddleware = async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const headerAuthorization = req.headers.authorization ?? '';
+    const bearer = headerAuthorization.split(' ')[0];
+    const token = headerAuthorization.split(' ')[1];
+
+    if (!token || bearer !== 'Bearer') {
+        return next({
+            type: 'invalid_token',
+            ...toResponse(),
+        });
+    }
+
+    const verifyToken = await jwt.verify(token);
+    if (!verifyToken) {
+        return next({
+            type: 'invalid_token',
+            ...toResponse(),
+        });
+    }
+
+    req.user = verifyToken;
+
+    next();
 };
 
-export default class Middleware {
-    jwt: Jwt;
-    messageInvalidToken: string;
-    messageErrorTitle: string;
-
-    constructor(args: constructorType) {
-        this.jwt = args.jwt;
-        this.messageInvalidToken =
-            "We're sorry, your login token has expired or is invalid. Please log in again to continue using our service.";
-        this.messageErrorTitle = 'Invalid or Expired Token';
-    }
-
-    toResponse() {
-        return {
-            statusCode: 400,
-            message: this.messageInvalidToken,
-            messageTitle: this.messageErrorTitle,
-        };
-    }
-
-    async authMiddleware(req: CustomRequest, res: Response, next: NextFunction) {
-        const headerAuthorization = req.headers.authorization ?? '';
-        const bearer = headerAuthorization.split(' ')[0];
-        const token = headerAuthorization.split(' ')[1];
-
-        if (!token || bearer !== 'Bearer') {
-            return res.status(400).send(this.toResponse());
+export const permissionRole = (rolesGetPermission: string[]) => {
+    return async (req: CustomRequest, res: Response, next: NextFunction) => {
+        const userRole = req.user?.role_slug ?? '';
+        if (!rolesGetPermission.includes(userRole)) {
+            return next({
+                type: 'permission_role_error',
+                statusCode: 400,
+                message: 'Access Denied',
+                messageTitle: 'you do not have permission to perform this operation',
+            });
         }
-
-        const verifyToken = await this.jwt.verify(token);
-        if (!verifyToken) {
-            return res.status(400).send(this.toResponse());
-        }
-
-        req.user = verifyToken;
 
         next();
-    }
-}
+    };
+};
