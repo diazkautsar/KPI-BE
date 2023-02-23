@@ -1,5 +1,5 @@
 import Validator from 'validatorjs';
-import mongoose, { Connection } from 'mongoose';
+import { Connection } from 'mongoose';
 
 import { GREInterface } from '../../interface/response.interface';
 import { UserInterface } from '../../interface/user.interface';
@@ -8,7 +8,7 @@ import logger from '../../libraries/logger';
 import Bcrypt from '../../libraries/Bcrypt';
 import UserRoleRepository from '../../repositories/UserRole.repository';
 import UserRepository from '../../repositories/User.repository';
-import { ROLE_ADMINISTRATOR, ROLE_LEARNER, ROLE_PROVIDER } from '../../constants/index';
+import { ROLE_LEARNER, ROLE_PROVIDER } from '../../constants/index';
 
 type constructorType = {
     userRoleRepository: UserRoleRepository;
@@ -50,14 +50,6 @@ export default class CreateUserUseCase {
             response.success = false;
             response.messageTitle = 'Form Invalid';
             response.data = validator.errors.all();
-
-            return response;
-        }
-        if (user.role_slug !== ROLE_ADMINISTRATOR) {
-            response.statusCode = 400;
-            response.success = false;
-            response.messageTitle = 'Bad Request';
-            response.message = "You're not eligible to create user";
 
             return response;
         }

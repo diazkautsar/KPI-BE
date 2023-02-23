@@ -21,7 +21,8 @@ import Jwt from '../libraries/Jwt';
 import Bcrypt from '../libraries/Bcrypt';
 
 // middlewares
-import { authMiddleware } from '../middlewares/index';
+import { authMiddleware, permissionRole } from '../middlewares/index';
+import { ROLE_ADMINISTRATOR } from '../constants/index';
 
 const jwt = new Jwt();
 const httpResponse = new HttpResponse();
@@ -53,13 +54,18 @@ const controller = new UserController({
 
 const router = express.Router();
 
-router.post('/add', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        await controller.createUser(req, res, next);
-    } catch (error) {
-        next(error);
+router.post(
+    '/add',
+    authMiddleware,
+    permissionRole([ROLE_ADMINISTRATOR]),
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            await controller.createUser(req, res, next);
+        } catch (error) {
+            next(error);
+        }
     }
-});
+);
 
 router.get('/:userId', authMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
