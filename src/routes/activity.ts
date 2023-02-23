@@ -9,6 +9,7 @@ import ActivityController from '../controllers/activityController';
 // use cases
 import CreateActivityUseCase from '../useCases/activityUseCase/CreateActivityUseCase';
 import GetActivityUseCase from '../useCases/activityUseCase/GetActivityUseCase';
+import UpdateActivityUseCase from '../useCases/activityUseCase/UpdateActivityUseCase';
 
 // repositories
 import ActivityRepository from '../repositories/Activity.repository';
@@ -34,12 +35,17 @@ const useCases = {
     getActivityUseCase: new GetActivityUseCase({
         activityRepository,
     }),
+    updateActivityUseCase: new UpdateActivityUseCase({
+        conn,
+        activityRepository,
+    }),
 };
 
 const controller = new ActivityController({
     httpResponse,
     createActivityUseCase: useCases.createActivityUseCase,
     getActivityUseCase: useCases.getActivityUseCase,
+    updateActivityUseCase: useCases.updateActivityUseCase,
 });
 
 const router = express.Router();
@@ -72,5 +78,31 @@ router.get('/', authMiddleware, async (req: CustomRequest, res: Response, next: 
         next(error);
     }
 });
+
+router.put(
+    '/',
+    authMiddleware,
+    permissionRole([ROLE_ADMINISTRATOR, ROLE_PROVIDER]),
+    async (req: CustomRequest, res: Response, next: NextFunction) => {
+        try {
+            await controller.updateActivity(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
+router.delete(
+    '/:activityId',
+    authMiddleware,
+    permissionRole([ROLE_ADMINISTRATOR, ROLE_PROVIDER]),
+    async (req: CustomRequest, res: Response, next: NextFunction) => {
+        try {
+            await controller.deleteActivity(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
 
 export default router;
