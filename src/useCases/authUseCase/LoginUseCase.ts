@@ -7,6 +7,7 @@ import Bcrypt from '../../libraries/Bcrypt';
 import Jwt from '../../libraries/Jwt';
 import UserRepository from '../../repositories/User.repository';
 import Utililty from '../../utilities';
+import { CustomJwtPayload } from '../../interface/jwt.interface';
 
 type constructorType = {
     userRepository: UserRepository;
@@ -75,7 +76,7 @@ export default class LoginUseCase {
                 return response;
             }
 
-            const data = {
+            const data: CustomJwtPayload = {
                 id: user.id,
                 name: user.name,
                 username: user.username,
