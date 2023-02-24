@@ -87,12 +87,12 @@ export default class CourseController {
         const payload = {
             body: {
                 is_active: false,
-                id: req.params.activityId,
+                id: req.params.courseId,
             },
         };
 
-        // const response = await this.updateCourseUseCase.exec(payload);
+        const response = await this.updateCourseUseCase.exec(payload);
 
-        // this.httpResponse.httpResponse(response, res);
+        this.httpResponse.httpResponse(response, res);
     }
 }
