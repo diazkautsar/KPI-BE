@@ -4,6 +4,7 @@ import authRouter from './auth';
 import userRouter from './user';
 import activityRouter from './activity';
 import moduleRouter from './module';
+import courseRouter from './course';
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.use('/auth', authRouter);
 router.use('/user', userRouter);
 router.use('/activity', activityRouter);
 router.use('/module', moduleRouter);
+router.use('/course', courseRouter);
 
 export default router;
