@@ -8,6 +8,7 @@ import ModuleController from '../controllers/moduleController';
 
 // use cases
 import CreateModuelUseCase from '../useCases/moduleUseCase/CreateModuleUseCase';
+import GetModuleUseCase from '../useCases/moduleUseCase/GetModuleUseCase';
 
 // repositories
 import ModuleRepository from '../repositories/Module.repository';
@@ -27,17 +28,21 @@ const httpResponse = new HttpResponse();
 const moduleRepository = new ModuleRepository();
 const activityRepository = new ActivityRepository();
 
-const useCaeses = {
+const useCases = {
     createModuleUseCase: new CreateModuelUseCase({
         conn,
         moduleRepository,
         activityRepository,
     }),
+    getModuleUseCase: new GetModuleUseCase({
+        moduleRepository,
+    }),
 };
 
 const controller = new ModuleController({
     httpResponse,
-    createModuleUseCase: useCaeses.createModuleUseCase,
+    createModuleUseCase: useCases.createModuleUseCase,
+    getModuleUseCase: useCases.getModuleUseCase,
 });
 
 const router = express.Router();
@@ -54,5 +59,21 @@ router.post(
         }
     }
 );
+
+router.get('/:moduleId', authMiddleware, async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        await controller.getModuleById(req, res, next);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get('/', authMiddleware, async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        await controller.getModules(req, res, next);
+    } catch (error) {
+        next(error);
+    }
+});
 
 export default router;
