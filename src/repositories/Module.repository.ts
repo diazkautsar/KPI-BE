@@ -26,4 +26,15 @@ export default class ModuleRepository {
             return [];
         }
     }
+
+    async updateModule(filter: { [K: string]: any }, update: { [K: string]: any }, session: ClientSession) {
+        try {
+            return await session.withTransaction(async () =>
+                moduleModel.findOneAndUpdate(filter, update, { new: true })
+            );
+        } catch (error) {
+            logger.error(`Error update activity ` + error);
+            throw new Error(`Error update activity ` + error);
+        }
+    }
 }
