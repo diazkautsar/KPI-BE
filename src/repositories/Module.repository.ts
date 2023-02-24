@@ -1,6 +1,7 @@
 import { ClientSession } from 'mongoose';
 import moduleModel from '../models/module.model';
 import { ModuleInterface } from '../interface/module.interface';
+import { ActivityInterface } from '../interface/activity.interface';
 import logger from '../libraries/logger';
 
 export default class ModuleRepository {
@@ -15,7 +16,11 @@ export default class ModuleRepository {
 
     async getModule(payload: any) {
         try {
-            return await moduleModel.find(payload);
+            return await moduleModel
+                .find(payload)
+                .populate<{ activities: ActivityInterface }>('activities')
+                .orFail()
+                .exec();
         } catch (error) {
             logger.error(error);
             return [];
