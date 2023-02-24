@@ -78,9 +78,9 @@ export default class CourseController {
             body: req.body,
         };
 
-        // const response = await this.updateModuleUseCase.exec(payload);
+        const response = await this.updateCourseUseCase.exec(payload);
 
-        // this.httpResponse.httpResponse(response, res);
+        this.httpResponse.httpResponse(response, res);
     }
 
     async deleteCourse(req: CustomRequest, res: Response, next: NextFunction) {

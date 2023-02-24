@@ -81,4 +81,6 @@ export default class ModuleController {
 
         this.httpResponse.httpResponse(response, res);
     }
+
+    // TOOD ADD ENDPOINT DELETE
 }

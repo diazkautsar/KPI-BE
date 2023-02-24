@@ -38,7 +38,11 @@ const useCases = {
     getCourseUseCase: new GetCourseUseCase({
         courseRepository,
     }),
-    updateCourseUseCase: new UpdateCourseUseCase(),
+    updateCourseUseCase: new UpdateCourseUseCase({
+        conn,
+        courseRepository,
+        moduleRepository,
+    }),
 };
 
 const controller = new CourseController({
