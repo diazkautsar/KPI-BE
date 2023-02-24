@@ -91,4 +91,17 @@ router.put('/', authMiddleware, async (req: CustomRequest, res: Response, next: 
     }
 });
 
+router.delete(
+    '/:moduleId',
+    authMiddleware,
+    permissionRole([ROLE_ADMINISTRATOR, ROLE_PROVIDER]),
+    async (req: CustomRequest, res: Response, next: NextFunction) => {
+        try {
+            await controller.deleteModule(req, res, next);
+        } catch (error) {
+            next(error);
+        }
+    }
+);
+
 export default router;

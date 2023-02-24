@@ -82,5 +82,16 @@ export default class ModuleController {
         this.httpResponse.httpResponse(response, res);
     }
 
-    // TOOD ADD ENDPOINT DELETE
+    async deleteModule(req: CustomRequest, res: Response, next: NextFunction) {
+        const payload = {
+            body: {
+                is_active: false,
+                id: req.params.moduleId,
+            },
+        };
+
+        const response = await this.updateModuleUseCase.exec(payload);
+
+        this.httpResponse.httpResponse(response, res);
+    }
 }
