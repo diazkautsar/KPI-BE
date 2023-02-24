@@ -9,6 +9,7 @@ import ModuleController from '../controllers/moduleController';
 // use cases
 import CreateModuelUseCase from '../useCases/moduleUseCase/CreateModuleUseCase';
 import GetModuleUseCase from '../useCases/moduleUseCase/GetModuleUseCase';
+import UpdateModuleUseCase from '../useCases/moduleUseCase/UpdateModuleUseCase';
 
 // repositories
 import ModuleRepository from '../repositories/Module.repository';
@@ -37,12 +38,18 @@ const useCases = {
     getModuleUseCase: new GetModuleUseCase({
         moduleRepository,
     }),
+    updateModuleUseCase: new UpdateModuleUseCase({
+        conn,
+        moduleRepository,
+        activityRepository,
+    }),
 };
 
 const controller = new ModuleController({
     httpResponse,
     createModuleUseCase: useCases.createModuleUseCase,
     getModuleUseCase: useCases.getModuleUseCase,
+    updateModuleUseCase: useCases.updateModuleUseCase,
 });
 
 const router = express.Router();
@@ -71,6 +78,14 @@ router.get('/:moduleId', authMiddleware, async (req: CustomRequest, res: Respons
 router.get('/', authMiddleware, async (req: CustomRequest, res: Response, next: NextFunction) => {
     try {
         await controller.getModules(req, res, next);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.put('/', authMiddleware, async (req: CustomRequest, res: Response, next: NextFunction) => {
+    try {
+        await controller.updateModule(req, res, next);
     } catch (error) {
         next(error);
     }

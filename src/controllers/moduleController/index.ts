@@ -5,22 +5,26 @@ import { CustomRequest } from '../../interface/request.interface';
 import Utililty from '../../utilities';
 import CreateModuelUseCase from '../../useCases/moduleUseCase/CreateModuleUseCase';
 import GetModuleUseCase from '../../useCases/moduleUseCase/GetModuleUseCase';
+import UpdateModuleUseCase from '../../useCases/moduleUseCase/UpdateModuleUseCase';
 
 type constructorType = {
     httpResponse: HttpResponse;
     createModuleUseCase: CreateModuelUseCase;
     getModuleUseCase: GetModuleUseCase;
+    updateModuleUseCase: UpdateModuleUseCase;
 };
 
 export default class ModuleController {
     httpResponse: HttpResponse;
     createModuleUseCase: CreateModuelUseCase;
     getModuleUseCase: GetModuleUseCase;
+    updateModuleUseCase: UpdateModuleUseCase;
 
     constructor(args: constructorType) {
         this.httpResponse = args.httpResponse;
         this.createModuleUseCase = args.createModuleUseCase;
         this.getModuleUseCase = args.getModuleUseCase;
+        this.updateModuleUseCase = args.updateModuleUseCase;
     }
 
     async createModule(req: CustomRequest, res: Response, next: NextFunction) {
@@ -64,6 +68,16 @@ export default class ModuleController {
         }
 
         const response = await this.getModuleUseCase.exec(null, is_active);
+
+        this.httpResponse.httpResponse(response, res);
+    }
+
+    async updateModule(req: CustomRequest, res: Response, next: NextFunction) {
+        const payload = {
+            body: req.body,
+        };
+
+        const response = await this.updateModuleUseCase.exec(payload);
 
         this.httpResponse.httpResponse(response, res);
     }
