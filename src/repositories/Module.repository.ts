@@ -10,7 +10,7 @@ export default class ModuleRepository {
             return await session.withTransaction(async () => moduleModel.create(payload));
         } catch (error) {
             logger.error(error);
-            throw new Error('Error insert activity');
+            throw new Error('Error insert modul');
         }
     }
 
@@ -33,8 +33,8 @@ export default class ModuleRepository {
                 moduleModel.findOneAndUpdate(filter, update, { new: true })
             );
         } catch (error) {
-            logger.error(`Error update activity ` + error);
-            throw new Error(`Error update activity ` + error);
+            logger.error(`Error update modul ` + error);
+            throw new Error(`Error update modul ` + error);
         }
     }
 }
