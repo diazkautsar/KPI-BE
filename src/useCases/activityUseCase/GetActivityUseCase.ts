@@ -3,6 +3,7 @@ import { GREInterface } from '../../interface/response.interface';
 import ActivityRepository from '../../repositories/Activity.repository';
 
 import logger from '../../libraries/logger';
+import { ActivityInterface } from '../../interface/activity.interface';
 
 type constructorType = {
     activityRepository: ActivityRepository;
@@ -30,11 +31,13 @@ export default class GetActivityUseCase {
                 payload['_id'] = id;
             }
 
+            const data = await this.activityRepository.getActivity(payload);
+
             response.success = true;
             response.statusCode = 200;
             response.message = 'Get Activity';
             response.messageTitle = 'Get Activity';
-            response.data = await this.activityRepository.getActivity(payload);
+            response.data = await this.toResponse(data);
 
             return response;
         } catch (error) {
@@ -46,5 +49,18 @@ export default class GetActivityUseCase {
         }
 
         return response;
+    }
+
+    async toResponse(data: [] | { [K: string]: any }[]): Promise<ActivityInterface[] | []> {
+        return data.map((item: { [K: string]: any }) => ({
+            id: item._id,
+            name: item.name,
+            description: item.description,
+            media_type: item.media_type ?? null,
+            media_url: item.media_url ?? null,
+            is_active: item.is_active ?? null,
+            created_by: item.created_by ?? null,
+            created_by_id: item.created_by_id ?? null,
+        }));
     }
 }
