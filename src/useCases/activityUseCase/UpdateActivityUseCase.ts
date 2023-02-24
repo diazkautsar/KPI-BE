@@ -60,7 +60,7 @@ export default class UpdateActivityUseCase {
             const filter = { _id: bodyReq.id };
             const update = bodyReq;
 
-            const updated = await this.activityRepository.updateActivityRepository(filter, update, session);
+            const updated = await this.activityRepository.updateActivity(filter, update, session);
 
             session.endSession();
 

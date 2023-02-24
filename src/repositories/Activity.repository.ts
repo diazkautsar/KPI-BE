@@ -22,7 +22,7 @@ export default class ActivityRepository {
         }
     }
 
-    async updateActivityRepository(filter: { [K: string]: any }, update: { [K: string]: any }, session: ClientSession) {
+    async updateActivity(filter: { [K: string]: any }, update: { [K: string]: any }, session: ClientSession) {
         try {
             return await session.withTransaction(async () =>
                 activityModel.findOneAndUpdate(filter, update, { new: true })
