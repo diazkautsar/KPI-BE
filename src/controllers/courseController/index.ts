@@ -56,9 +56,9 @@ export default class CourseController {
 
         const payload = [id];
 
-        // const response = await this.getCourseUseCase.exec(payload, is_active);
+        const response = await this.getCourseUseCase.exec(payload, is_active);
 
-        // this.httpResponse.httpResponse(response, res);
+        this.httpResponse.httpResponse(response, res);
     }
 
     async getCourses(req: CustomRequest, res: Response, next: NextFunction) {
@@ -68,9 +68,9 @@ export default class CourseController {
             is_active = Utililty.trueOrFalse(data);
         }
 
-        // const response = await this.getCourseUseCase.exec(null, is_active);
+        const response = await this.getCourseUseCase.exec(null, is_active);
 
-        // this.httpResponse.httpResponse(response, res);
+        this.httpResponse.httpResponse(response, res);
     }
 
     async updateCourse(req: CustomRequest, res: Response, next: NextFunction) {

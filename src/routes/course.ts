@@ -35,7 +35,9 @@ const useCases = {
         courseRepository,
         moduleRepository,
     }),
-    getCourseUseCase: new GetCourseUseCase(),
+    getCourseUseCase: new GetCourseUseCase({
+        courseRepository,
+    }),
     updateCourseUseCase: new UpdateCourseUseCase(),
 };
 
