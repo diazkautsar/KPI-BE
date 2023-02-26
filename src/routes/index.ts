@@ -5,6 +5,7 @@ import userRouter from './user';
 import activityRouter from './activity';
 import moduleRouter from './module';
 import courseRouter from './course';
+import utilRouter from './util';
 
 const router = express.Router();
 
@@ -17,5 +18,6 @@ router.use('/user', userRouter);
 router.use('/activity', activityRouter);
 router.use('/module', moduleRouter);
 router.use('/course', courseRouter);
+router.use('/util', utilRouter);
 
 export default router;
