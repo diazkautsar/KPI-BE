@@ -34,8 +34,8 @@ export default class GetCourseUseCase {
 
             response.success = true;
             response.statusCode = 200;
-            response.message = 'Get Module';
-            response.messageTitle = 'Get Module';
+            response.message = 'Get Course';
+            response.messageTitle = 'Get Course';
             response.data = await this.toResponse(data);
 
             return response;
@@ -56,6 +56,7 @@ export default class GetCourseUseCase {
             name: item.name,
             description: item.description,
             cover_image: item.cover_image,
+            keyword: item.keyword,
             modules: item.modules,
             is_active: item.is_active ?? null,
             created_by: item.created_by ?? null,
